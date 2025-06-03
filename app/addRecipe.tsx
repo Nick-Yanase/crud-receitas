@@ -64,7 +64,7 @@ export default function AddRecipe() {
       id: id ? Number(id) : undefined,
       nome,
       descricao,
-      tempo_total: "",
+      tempo_total: tempoTotal,
       ingredientes: ingredientes.filter((i) => i.trim() !== ""),
       passo_a_passo: passoAPasso.filter((p) => p.trim() !== ""),
       image: imagem,

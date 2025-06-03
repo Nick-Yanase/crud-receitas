@@ -3,18 +3,21 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
-  Image,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Receita } from "../models/Receita"; // Ajuste o caminho conforme seu projeto
+import { Receita } from "../models/Receita";
 import { criarTabela, listarReceitas } from "../services/ReceitaService";
 import ReceitaCard from "@/components/ReceitaCard";
 
 const Home = () => {
   const [receitas, setReceitas] = useState<Receita[]>([]);
+  const [filtro, setFiltro] = useState("");
+  const [receitasFiltradas, setReceitasFiltradas] = useState<Receita[]>([]);
+
   const isFocused = useIsFocused();
   const router = useRouter();
 
@@ -23,11 +26,14 @@ const Home = () => {
       await criarTabela();
     })();
   }, []);
-  
 
   useEffect(() => {
     carregarReceitas();
   }, [isFocused]);
+
+  useEffect(() => {
+    aplicarFiltro();
+  }, [filtro, receitas]);
 
   const carregarReceitas = async () => {
     try {
@@ -35,6 +41,20 @@ const Home = () => {
       setReceitas(dados);
     } catch (error) {
       console.log("Erro ao carregar receitas:", error);
+    }
+  };
+
+  const aplicarFiltro = () => {
+    if (filtro.trim() === "") {
+      setReceitasFiltradas(receitas);
+    } else {
+      const texto = filtro.toLowerCase();
+      const filtradas = receitas.filter(
+        (r) =>
+          r.nome.toLowerCase().includes(texto) ||
+          r.descricao?.toLowerCase().includes(texto)
+      );
+      setReceitasFiltradas(filtradas);
     }
   };
 
@@ -46,13 +66,21 @@ const Home = () => {
     <View style={styles.container}>
       <Text style={styles.header}>Minhas Receitas</Text>
 
-      {receitas.length === 0 ? (
-        <Text style={styles.semReceitas}>Nenhuma receita cadastrada.</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Buscar receita..."
+        placeholderTextColor="#999"
+        value={filtro}
+        onChangeText={setFiltro}
+      />
+
+      {receitasFiltradas.length === 0 ? (
+        <Text style={styles.semReceitas}>Nenhuma receita encontrada.</Text>
       ) : (
         <FlatList
-          data={receitas}
+          data={receitasFiltradas}
           keyExtractor={(item) => item.nome}
-          renderItem={renderItem} //pode ser trocado por um componente
+          renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 20 }}
         />
       )}
@@ -68,6 +96,7 @@ const Home = () => {
 };
 
 export default Home;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -94,6 +123,17 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
   },
+  input: {
+    backgroundColor: "#f0f0f0",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },  
   imagemPlaceholder: {
     width: 100,
     height: 100,
