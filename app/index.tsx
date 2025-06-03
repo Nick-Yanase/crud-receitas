@@ -19,8 +19,11 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
-    criarTabela();
+    (async () => {
+      await criarTabela();
+    })();
   }, []);
+  
 
   useEffect(() => {
     carregarReceitas();
