@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Receita } from "../models/Receita"; // Ajuste o caminho conforme seu projeto
 import { criarTabela, listarReceitas } from "../services/ReceitaService";
+import ReceitaCard from "@/components/ReceitaCard";
 
 const Home = () => {
   const [receitas, setReceitas] = useState<Receita[]>([]);
@@ -35,31 +36,7 @@ const Home = () => {
   };
 
   const renderItem = ({ item }: { item: Receita }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => {
-        if (item.id) {
-          router.push({
-            pathname: "/details",
-            params: { id: item.id.toString() },
-          });
-        }
-      }}
-    >
-      {item.image ? (
-        <Image source={{ uri: item.image }} style={styles.imagem} />
-      ) : (
-        <View style={styles.imagemPlaceholder}>
-          <Text style={styles.placeholderText}>Sem imagem</Text>
-        </View>
-      )}
-      <View style={styles.info}>
-        <Text style={styles.titulo}>{item.nome}</Text>
-        <Text style={styles.descricao} numberOfLines={2}>
-          {item.descricao}
-        </Text>
-      </View>
-    </TouchableOpacity>
+    <ReceitaCard item={item} />
   );
 
   return (
