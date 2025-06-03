@@ -9,13 +9,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Receita } from "../../models/Receita"; // Ajuste o caminho conforme seu projeto
-import { listarReceitas } from "../../services/ReceitaService";
+import { Receita } from "../models/Receita"; // Ajuste o caminho conforme seu projeto
+import { criarTabela, listarReceitas } from "../services/ReceitaService";
 
 const Home = () => {
   const [receitas, setReceitas] = useState<Receita[]>([]);
   const isFocused = useIsFocused();
   const router = useRouter();
+
+  useEffect(() => {
+    criarTabela();
+  }, []);
 
   useEffect(() => {
     carregarReceitas();
@@ -36,7 +40,7 @@ const Home = () => {
       onPress={() => {
         if (item.id) {
           router.push({
-            pathname: "/addRecipe",
+            pathname: "/details",
             params: { id: item.id.toString() },
           });
         }
