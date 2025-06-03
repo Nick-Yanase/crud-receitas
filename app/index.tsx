@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 50,
     position: "absolute",
-    bottom: 30,
+    bottom: 100,
     right: 20,
     elevation: 5,
   },

@@ -18,8 +18,8 @@ export default function RootLayout() {
   }
   return (
       <Stack>
-        <Stack.Screen name="index" options={{ title: 'Home' }} />
-        <Stack.Screen name="details" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ title: '🍔 Outdoor recipes 🍪', headerTitleAlign: 'center',  headerBackVisible: false, }} />
+        <Stack.Screen name="details" options={{ title: 'Detalhes da Receita', headerTitleAlign: 'center',  headerShown: false }} />
         <Stack.Screen name="addRecipe" options={{ title: 'Receita' }} />
         <Stack.Screen name="+not-found" />
       </Stack>
